@@ -17,10 +17,14 @@ defmodule Fluxter.Packet do
     ]
   end
 
-  def build(header, name, tags, fields, nil) do
+  def build(header, name, tags, fields, ts) do
     tags   = encode_tags(tags)
     fields = encode_fields(fields)
-    [header, encode_key(name), tags, ?\s, fields]
+
+    case is_nil(ts) do
+      true -> [header, encode_key(name), tags, ?\s, fields] 
+      false -> [header, encode_key(name), tags, ?\s, fields, ?\s, Integer.to_string(DateTime.to_unix(ts, :microseconds))] 
+    end
   end
 
   defp encode_tags([]), do: ""

@@ -291,19 +291,21 @@ defmodule Fluxter do
         end
       end
 
-      def write(name, tags \\ [], fields)
+      def write(name, tags \\ [], fields) do
+        write(name, tags, fields, nil)
+      end
 
-      def write(name, tags, fields) when is_list(fields) do
+      def write(name, tags, fields, ts) when is_list(fields) do
         System.unique_integer([:positive])
         |> rem(@pool_size)
         |> worker_name()
-        |> Fluxter.Conn.write(name, tags, fields)
+        |> Fluxter.Conn.write(name, tags, fields, ts)
       end
 
-      def write(name, tags, value)
+      def write(name, tags, value, ts)
       when is_float(value) or is_integer(value)
       when is_boolean(value) or is_binary(value) do
-        write(name, tags, [value: value])
+        write(name, tags, [value: value], ts)
       end
 
       def measure(name, tags \\ [], fields \\ [], fun)
