@@ -23,7 +23,7 @@ defmodule Fluxter.Packet do
 
     case is_nil(ts) do
       true -> [header, encode_key(name), tags, ?\s, fields] 
-      false -> [header, encode_key(name), tags, ?\s, fields, ?\s, [Integer.to_string(DateTime.to_unix(ts, :nanoseconds))]] 
+      false -> [header, encode_key(name), tags, ?\s, fields, ?\s, [DateTime.to_unix(ts, :nanoseconds)]] 
     end
   end
 
